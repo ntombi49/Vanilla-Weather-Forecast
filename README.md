@@ -15,7 +15,7 @@ This is a weather forecast web application built using HTML, CSS, and JavaScript
 - OpenWeather API
 
 ## Live Demo
-[View on Netlify]()
+[View on Netlify](cheerful-gumption-19932c.netlify.app)
 
 ## Author
 Twanano Rikhotso
