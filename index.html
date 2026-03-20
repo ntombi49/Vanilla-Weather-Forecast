@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Weather App</title>
+  <title>Weather App 🌤</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <div class="container">
     <h1>Weather App 🌤</h1>
 
-    <input type="text" id="city-input" placeholder="Enter a city..." />
-    <button id="search-btn">Search</button>
+    <div class="search-box">
+      <input type="text" id="city-input" placeholder="Enter a city..." />
+      <button id="search-btn">Search</button>
+    </div>
 
-    <div id="weather-result">
+    <div id="weather-result" class="weather-card">
       <h2 id="city-name"></h2>
-      <img id="icon" />
+      <img id="icon" alt="Weather Icon"/>
       <p id="temperature"></p>
       <p id="description"></p>
       <p id="wind"></p>
@@ -24,7 +25,7 @@
   </div>
 
   <footer>
-    <a href="#" target="_blank">Open-source on GitHub</a>
+    <a href="https://github.com/YOURUSERNAME/weather-app" target="_blank">Open-source on GitHub</a>
   </footer>
 
   <script src="script.js"></script>
