@@ -3,32 +3,64 @@ let apiKey = "ef83e0cac69de31f90e999e8143ea0e7";
 let searchBtn = document.querySelector("#search-btn");
 
 searchBtn.addEventListener("click", function () {
-  let city = document.querySelector("#city-input").value;
+  let city = document.querySelector("#city-input").value.trim();
+  
+  if (city === "") {
+    alert("Please enter a city!");
+    return;
+  }
 
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
 
   fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      displayWeather(data);
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("City not found");
+      }
+      return response.json();
     })
+    .then(data => displayForecast(data))
     .catch(error => {
-      alert("City not found!");
+      alert(error.message);
     });
 });
 
-function displayWeather(data) {
-  let cityName = data.name;
-  let temperature = data.main.temp;
-  let description = data.weather[0].description;
-  let wind = data.wind.speed;
-  let icon = data.weather[0].icon;
+function displayForecast(data) {
+  let weatherResult = document.querySelector("#weather-result");
+  weatherResult.innerHTML = "";
 
-  document.querySelector("#city-name").innerHTML = cityName;
-  document.querySelector("#temperature").innerHTML = `🌡 ${temperature}°C`;
-  document.querySelector("#description").innerHTML = `☁️ ${description}`;
-  document.querySelector("#wind").innerHTML = `💨 Wind: ${wind} m/s`;
+  let cityName = data.city.name;
+  let heading = document.createElement("h2");
+  heading.textContent = cityName;
+  weatherResult.appendChild(heading);
 
-  let iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
-  document.querySelector("#icon").src = iconUrl;
+  let daysShown = 0;
+  let lastDate = "";
+
+  data.list.forEach(item => {
+    let date = item.dt_txt.split(" ")[0];
+
+    if (date !== lastDate && daysShown < 5) {
+      lastDate = date;
+      daysShown++;
+
+      let temp = item.main.temp;
+      let description = item.weather[0].description;
+      let wind = item.wind.speed;
+      let icon = item.weather[0].icon;
+
+      let dayCard = document.createElement("div");
+      dayCard.className = "weather-card";
+
+      dayCard.innerHTML = `
+        <h3>${date}</h3>
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="Weather Icon"/>
+        <p>🌡 Temp: ${temp}°C</p>
+        <p>☁️ ${description}</p>
+        <p>💨 Wind: ${wind} m/s</p>
+      `;
+
+      weatherResult.appendChild(dayCard);
+    }
+  });
 }
